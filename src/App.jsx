@@ -76,14 +76,14 @@ const App = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-6">
-      <h1 className="text-4xl font-bold mb-6">✊✋✌️ Rock Paper Scissors</h1>
+      <h1 className="text-2xl sm:text-4xl font-bold mb-6 text-center">✊✋✌️ Rock Paper Scissors</h1>
 
-      <div className="flex gap-6 mb-4">
+      <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-4 justify-center">
         {choices.map((choice) => (
           <button
             key={choice.name}
             disabled={gameOver}
-            className={`text-4xl ${gameOver ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-700"} text-white font-bold py-2 px-6 rounded-lg transition`}
+            className={`text-4xl ${gameOver ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-700"} text-white font-bold py-3 px-6 sm:py-2 sm:px-6 rounded-lg transition`}
             onClick={() => handleChoice(choice.name)}
           >
             {choice.icon}
@@ -91,19 +91,19 @@ const App = () => {
         ))}
       </div>
 
-      <div className="text-lg mt-4 text-center">
+      <div className="text-base sm:text-lg mt-4 text-center space-y-2">
         {userChoice && <p><strong>You:</strong> {getIcon(userChoice)}</p>}
         {computerChoice && <p><strong>Computer:</strong> {getIcon(computerChoice)}</p>}
-        {result && <p className="mt-2 text-2xl font-semibold">Result: {result}</p>}
+        {result && <p className="mt-2 text-xl sm:text-2xl font-semibold">Result: {result}</p>}
       </div>
 
-      <div className="flex gap-8 text-xl font-semibold mt-6">
+      <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 text-base sm:text-xl font-semibold mt-6 text-center">
         <p>👤 You: {userScore}</p>
         <p>💻 Computer: {computerScore}</p>
       </div>
 
       <button
-        className="mt-6 bg-red-500 hover:bg-red-700 text-white px-6 py-2 rounded"
+        className="mt-6 bg-red-500 hover:bg-red-700 text-white px-6 py-2 text-base sm:text-lg rounded"
         onClick={resetGame}
       >
         🔄 Reset Game
