@@ -18,36 +18,51 @@ const App = () => {
   const [result, setResult] = useState("");
   const [userScore, setUserScore] = useState(0);
   const [computerScore, setComputerScore] = useState(0);
-
- 
+  const [gameOver, setGameOver] = useState(false);
 
   const generateComputerChoice = () => {
     const random = Math.floor(Math.random() * 3);
     return choices[random].name;
   };
 
-  const determineWinner = (user, computer) => {
-    if (user === computer) return "Draw!";
-    if (
-      (user === "Rock" && computer === "Scissors") ||
-      (user === "Paper" && computer === "Rock") ||
-      (user === "Scissors" && computer === "Paper")
-    ) {
-      setUserScore(prev => prev + 1);
-      return "You Win!";
-    } else {
-      setComputerScore(prev => prev + 1);
-      return "You Lose!";
-    }
-  };
-
   const handleChoice = (choice) => {
+    if (gameOver) return;
+
     const compChoice = generateComputerChoice();
     setUserChoice(choice);
     setComputerChoice(compChoice);
-    const result = determineWinner(choice, compChoice);
-    setResult(result);
-    playSound(result);
+
+    let newUserScore = userScore;
+    let newComputerScore = computerScore;
+    let resultMessage = "";
+
+    if (choice === compChoice) {
+      resultMessage = "Draw!";
+    } else if (
+      (choice === "Rock" && compChoice === "Scissors") ||
+      (choice === "Paper" && compChoice === "Rock") ||
+      (choice === "Scissors" && compChoice === "Paper")
+    ) {
+      newUserScore += 1;
+      setUserScore(newUserScore);
+      resultMessage = "You Win!";
+    } else {
+      newComputerScore += 1;
+      setComputerScore(newComputerScore);
+      resultMessage = "You Lose!";
+    }
+
+    // Check for winner
+    if (newUserScore === 5) {
+      setGameOver(true);
+      resultMessage = "🎉 You Won the Game!";
+    } else if (newComputerScore === 5) {
+      setGameOver(true);
+      resultMessage = "💻 Computer Won the Game!";
+    }
+
+    setResult(resultMessage);
+    playSound(resultMessage);
   };
 
   const resetGame = () => {
@@ -56,6 +71,7 @@ const App = () => {
     setResult("");
     setUserScore(0);
     setComputerScore(0);
+    setGameOver(false);
   };
 
   return (
@@ -66,7 +82,8 @@ const App = () => {
         {choices.map((choice) => (
           <button
             key={choice.name}
-            className="text-4xl bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition"
+            disabled={gameOver}
+            className={`text-4xl ${gameOver ? "bg-gray-400" : "bg-blue-500 hover:bg-blue-700"} text-white font-bold py-2 px-6 rounded-lg transition`}
             onClick={() => handleChoice(choice.name)}
           >
             {choice.icon}
